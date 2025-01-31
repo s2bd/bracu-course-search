@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BRACU Course Search</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</head>
+<body>
+  <div class="about-panel" onclick="toggleAboutPanel()">
+        Credits
+    </div>
+    <div class="container">
+        <header>
+            <h1>📚 BRACU Course Search</h1>
+        </header>
+        <input type="text" id="search" placeholder="🔍 Search... course codes, e.g. CSE or faculty code, e.g. FHZ" oninput="filterCourses()">
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Course Code</th>
+                        <th>Faculty</th>
+                        <th>Seats Remaining</th>
+                        <th>Class Schedule</th>
+                        <th>Lab Schedule</th>
+                        <th>Exam Days</th>
+                    </tr>
+                </thead>
+                <tbody id="courseTable">
+                    <!-- Dynamic data here -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
