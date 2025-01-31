@@ -14,6 +14,8 @@ async function fetchCourses() {
         displayCourses(coursesData);
     } catch (error) {
         console.error("Error fetching courses:", error);
+    } finally {
+        loadingMessage.style.display = "none";
     }
 }
 
