@@ -6,10 +6,8 @@ body {
     padding: 0;
     display: flex;
     justify-content: center;
-    align-items: center;
-    height: 100vh;
+    min-height: 100vh;
     background: linear-gradient(135deg, #667eea, #764ba2);
-    overflow: hidden;
     color: #fff;
 }
 
@@ -24,7 +22,7 @@ body {
     text-align: center;
     animation: fadeIn 1s ease-in-out;
     position: relative;
-    overflow: hidden;
+    overflow: visible;
 }
 
 header {
@@ -89,7 +87,7 @@ tbody tr:hover {
     background: rgba(255, 255, 255, 0.1);
 }
 
-.course-code, .faculty {
+.course-code, .faculty, .section {
     position: relative;
     font-weight: bold;
     cursor: pointer;
@@ -98,8 +96,17 @@ tbody tr:hover {
     text-shadow: 0 0 10px #ffeb3b;
 }
 
-.course-code:hover, .faculty:hover {
+.faculty {
+  color: #00fbff;
+  text-shadow: 0 0 10px #00fbff;
+}
+
+.course-code:hover {
     text-shadow: 0 0 15px #ffeb3b, 0 0 30px #ffeb3b;
+}
+
+.faculty:hover {
+    text-shadow: 0 0 15px #00fbff, 0 0 30px #00fbff;
 }
 
 .course-code:hover::after, .faculty:hover::after {
@@ -236,4 +243,52 @@ tbody tr:hover {
 
 .about-panel a:hover {
     color: #fff;
+}
+
+#cart {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 250px;
+    background: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    display: none;
+    transition: all 0.3s ease-in-out;
+}
+
+#cart h2 {
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+#cart-items {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+#cart-items li {
+    display: flex;
+    justify-content: space-between;
+    padding: 5px 0;
+}
+
+.cart-remove {
+    cursor: pointer;
+    color: red;
+    margin-left: 10px;
+}
+
+#clear-cart {
+    background: red;
+    color: white;
+    border: none;
+    padding: 5px;
+    cursor: pointer;
+    width: 100%;
+    border-radius: 5px;
+    margin-top: 10px;
 }
