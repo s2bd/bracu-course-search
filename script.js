@@ -118,10 +118,10 @@ function toggleAboutPanel() {
         aboutPanel.innerHTML = `
             Credits - About this website
             <br><br>
-            Made by <a href="https://dewanmukto.com/home" target="_blank">Dewan Mukto</a><br>
+            Made by <a href="https://dewanmukto.com/home" target="_blank">Dewan Mukto</a> 👑<br>
             SLMS data from <a href="https://usis.eniamza.com/" target="_blank">USIS Unlocked</a> by <a href="https://eniamza.com/" target="_blank">Tashfeen Azmaine</a>
             <br>
-            Routine builder from <a href="https://preprereg.vercel.app/" target="_blank">PrePreReg</a> by <a href="https://eniac00.github.io/terminal-portfolio/" target="_blank">Abir Ahammed Bhuiyan</a>
+            Routine table from <a href="https://preprereg.vercel.app/" target="_blank">PrePreReg</a> by <a href="https://eniac00.github.io/terminal-portfolio/" target="_blank">Abir Ahammed Bhuiyan</a>
              <br><br>
              Tap/click again to close
         `;
