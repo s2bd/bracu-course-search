@@ -1,0 +1,239 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    overflow: hidden;
+    color: #fff;
+}
+
+.container {
+    width: 90%;
+    max-width: 1200px;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(10px);
+    text-align: center;
+    animation: fadeIn 1s ease-in-out;
+    position: relative;
+    overflow: hidden;
+}
+
+header {
+    margin-bottom: 20px;
+}
+
+h1 {
+    font-size: 5vw;
+    max-font-size: 48px;
+    text-shadow: 0 0 20px #fff, 0 0 30px #ff00cc, 0 0 40px #ff00cc;
+}
+
+input {
+    width: 100%;
+    max-width: 600px;
+    padding: 12px;
+    font-size: 1.2rem;
+    border: none;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    background: rgba(255, 255, 255, 0.2);
+    color: #fff;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(5px);
+    transition: box-shadow 0.3s ease;
+}
+
+input:focus {
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
+    outline: none;
+}
+
+.table-container {
+    overflow-x: auto;
+    max-height: 500px;
+    margin-top: 20px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(5px);
+}
+
+th, td {
+    padding: 10px 15px;
+    text-align: left;
+    font-size: 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+th {
+    background: rgba(255, 255, 255, 0.2);
+    font-weight: bold;
+    color: #000;
+    text-transform: uppercase;
+}
+
+tbody tr:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.course-code, .faculty {
+    position: relative;
+    font-weight: bold;
+    cursor: pointer;
+    color: #ffeb3b;
+    transition: 0.3s;
+    text-shadow: 0 0 10px #ffeb3b;
+}
+
+.course-code:hover, .faculty:hover {
+    text-shadow: 0 0 15px #ffeb3b, 0 0 30px #ffeb3b;
+}
+
+.course-code:hover::after, .faculty:hover::after {
+    content: attr(data-detail);
+    position: absolute;
+    left: 0;
+    top: 30px;
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 5px;
+    border-radius: 5px;
+    white-space: nowrap;
+    z-index: 9999; /* Added z-index */
+}
+
+.schedule, .lab-schedule, .exam-day {
+    display: inline-block;
+    padding: 5px 10px;
+    margin: 2px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.2);
+    cursor: pointer;
+    font-weight: bold;
+    color: #76ff03;
+    position: relative;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(5px);
+    transition: 0.3s;
+}
+
+.schedule:hover, .lab-schedule:hover, .exam-day:hover {
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
+    transform: scale(1.05);
+}
+
+.schedule:hover::after, .lab-schedule:hover::after, .exam-day:hover::after {
+    content: attr(data-full);
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 30px;
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 5px;
+    border-radius: 5px;
+    white-space: nowrap;
+    z-index: 9999; /* Added z-index */
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 768px) {
+    h1 {
+        font-size: 6vw;
+    }
+
+    input {
+        font-size: 1rem;
+        max-width: 90%;
+    }
+
+    table th, table td {
+        font-size: 1rem;
+    }
+
+    .table-container {
+        max-height: 400px;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 15px;
+    }
+
+    input {
+        font-size: 0.9rem;
+    }
+
+    table th, table td {
+        font-size: 0.9rem;
+    }
+
+    h1 {
+        font-size: 8vw;
+    }
+}
+
+.about-panel {
+    position: fixed;
+    bottom: 10px;
+    left: 10px;
+    background: rgba(0, 0, 0, 0.6);
+    padding: 10px 15px;
+    border-radius: 5px;
+    color: #fff;
+    font-size: 12px;
+    z-index: 1000;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    overflow: hidden;
+    white-space: nowrap;
+    max-width: 200px;
+}
+
+.about-panel:hover {
+    padding-right: 25px;
+    background: rgba(0, 0, 0, 0.8);
+}
+
+.about-panel:hover::after {
+    content: ' - About this website';
+    color: #aaa;
+}
+
+.about-panel.expanded {
+    max-width: 400px;
+    white-space: normal;
+    padding: 20px;
+}
+
+.about-panel.expanded::after {
+    content: '';
+}
+
+.about-panel a {
+    color: #0aff45;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.about-panel a:hover {
+    color: #fff;
+}
