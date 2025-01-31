@@ -8,11 +8,8 @@
     <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 </head>
 <body>
-  <div class="about-panel" onclick="toggleAboutPanel()">
-        Credits
-    </div>
     <div class="container">
-        <header>
+        <header><!-- Dewan Mukto says "Hi" -->
             <h1>📚 BRACU Course Search</h1>
         </header>
         <input type="text" id="search" placeholder="🔍 Search... course codes, e.g. CSE or faculty code, e.g. FHZ" oninput="filterCourses()">
@@ -41,6 +38,105 @@
     <ul id="cart-items"></ul>
     <button id="clear-cart">Clear All</button>
 </div>
+  <br />
+  
+  <!-- This section below is entirely from PrePreReg by Eniamza and Eni00 -->
+  <div class="routine-table">
+                <table align="center" cellspacing="2" cellpadding="10" id="data_table" border="1">
+                    <tbody><tr>
+                        <th>Time/Day</th>
+                        <th>Sunday</th>
+                        <th>Monday</th>
+                        <th>Tuesday</th>
+                        <th>Wednesday</th>
+                        <th>Thursday</th>
+                        <th>Friday</th>
+                        <th>Saturday</th>
+                    </tr>
+                    
+                    <tr id="row1">
+                        <td><b>08:00 AM-09:20 AM</b></td>
+                        <td id="1-1"></td>
+                        <td id="1-2"></td>
+                        <td id="1-3"></td>
+                        <td id="1-4"></td>
+                        <td id="1-5"></td>
+                        <td id="1-6"></td>
+                        <td id="1-7"></td>
+                    </tr><tr>
+
+                    </tr><tr id="row2">
+                        <td><b>09:30 AM-10:50 AM</b></td>
+                        <td id="2-1"></td>
+                        <td id="2-2"></td>
+                        <td id="2-3"></td>
+                        <td id="2-4"></td>
+                        <td id="2-5"></td>
+                        <td id="2-6"></td>
+                        <td id="2-7"></td>
+                    </tr>
+
+                    <tr id="row3">
+                        <td><b>11:00 AM-12:20 PM</b></td>
+                        <td id="3-1"></td>
+                        <td id="3-2"></td>
+                        <td id="3-3"></td>
+                        <td id="3-4"></td>
+                        <td id="3-5"></td>
+                        <td id="3-6"></td>
+                        <td id="3-7"></td>
+                    </tr>
+
+                    <tr id="row4">
+                        <td><b>12:30 PM-01:50 PM</b></td>
+                        <td id="4-1"></td>
+                        <td id="4-2"></td>
+                        <td id="4-3"></td>
+                        <td id="4-4"></td>
+                        <td id="4-5"></td>
+                        <td id="4-6"></td>
+                        <td id="4-7"></td>
+                    </tr>
+
+                    <tr id="row5">
+                        <td><b>02:00 PM-03:20 PM</b></td>
+                        <td id="5-1"></td>
+                        <td id="5-2"></td>
+                        <td id="5-3"></td>
+                        <td id="5-4"></td>
+                        <td id="5-5"></td>
+                        <td id="5-6"></td>
+                        <td id="5-7"></td>
+                    </tr>
+
+                    <tr id="row6">
+                        <td><b>03:30 PM-04:50 PM</b></td>
+                        <td id="6-1"></td>
+                        <td id="6-2"></td>
+                        <td id="6-3"></td>
+                        <td id="6-4"></td>
+                        <td id="6-5"></td>
+                        <td id="6-6"></td>
+                        <td id="6-7"></td>
+                    </tr>
+
+                    <tr id="row7">
+                        <td><b>05:00 PM-06:20 PM</b></td>
+                        <td id="7-1"></td>
+                        <td id="7-2"></td>
+                        <td id="7-3"></td>
+                        <td id="7-4"></td>
+                        <td id="7-5"></td>
+                        <td id="7-6"></td>
+                        <td id="7-7"></td>
+                    </tr>
+                </tbody></table>
+            </div>
+  <!-- The section above is entirely from PrePreReg by Eniamza and Eni00 -->
+  
+  <div class="about-panel" onclick="toggleAboutPanel()">
+        Credits
+    </div>
     <script src="script.js"></script>
 </body>
 </html>
