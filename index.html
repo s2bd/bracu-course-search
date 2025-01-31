@@ -1,9 +1,31 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BRACU Course Search</title>
+    <meta name="description" content="Search engine for information about courses, faculties, seats, schedules, etc. for BRAC University.">
+    <meta name="keywords" content="bracu course search, bracu unlocked, usis unlocked, connect unlocked, bracu connect, usis eniamza, preprereg eniamza">
+    <meta name="author" content="Dewan Mukto">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="BRACU Course Search">
+    <meta property="og:description" content="Search engine for information about courses, faculties, seats, schedules, etc. for BRAC University.">
+    <meta property="og:image" content="ogimage.png">
+    <meta property="og:url" content="https://bracu.muxday.com">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="en_US">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@dewan_mukto">
+    <meta name="twitter:title" content="BRACU Course Search">
+    <meta name="twitter:description" content="Search engine for information about courses, faculties, seats, schedules, etc. for BRAC University.">
+    <meta name="twitter:image" content="ogimage.png">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <link rel="icon" href="favicon.png" type="image/png">
+    <link rel="apple-touch-icon" href="favicon.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="favicon.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="favicon.png">
+    <link rel="apple-touch-icon" sizes="167x167" href="favicon.png">
     <link rel="stylesheet" href="styles.css">
     <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 </head>
@@ -14,6 +36,7 @@
         </header>
         <input type="text" id="search" placeholder="🔍 Search... course codes, e.g. CSE or faculty code, e.g. FHZ" oninput="filterCourses()">
         <div class="table-container">
+          <p id="loadingMessage">Please wait while the content loads up...</p>
             <table>
                 <thead>
                     <tr>
