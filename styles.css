@@ -257,6 +257,7 @@ tbody tr:hover {
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
     display: none;
     transition: all 0.3s ease-in-out;
+    z-index: 999;
 }
 
 #cart h2 {
