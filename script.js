@@ -4,6 +4,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 let coursesData = [];
 let secondaryData = [];
+let cart = [];
 
 async function fetchCourses() {
     try {
@@ -33,6 +34,7 @@ function displayCourses(courses) {
             <td class="course-code" data-detail="${course.courseCode} ${courseTitle ? '- ' + courseTitle : ''}">
                 ${course.courseCode} <i class="fas fa-info-circle"></i>
             </td>
+            <td class="section">${course.sectionName || "N/A"}</td> <!-- New Section Column -->
             <td class="faculty" data-detail="${course.faculties} ${empName ? '- ' + empName : ''}">
                 ${course.faculties} <i class="fas fa-user"></i>
             </td>
@@ -47,6 +49,7 @@ function displayCourses(courses) {
                 <span class="exam-tooltip" data-tooltip="Midterm Exam: ${midExam}">${midExam.split(",")[0]}</span>
                 <span class="exam-tooltip" data-tooltip="Final Exam: ${finalExam}">${finalExam.split(",")[0]}</span>
             </td>
+            <td><button class="add-to-cart" data-course="${course.courseCode}" data-section="${course.sectionName || 'N/A'}">➕</button></td>
         `;
         
         tableBody.appendChild(row);
@@ -105,4 +108,52 @@ function toggleAboutPanel() {
         aboutPanel.innerHTML = 'Credits';
         aboutPanel.classList.remove('expanded');
     }
+}
+
+document.addEventListener("click", (event) => {
+    if (event.target.classList.contains("add-to-cart")) {
+        const courseCode = event.target.dataset.course;
+        addToCart(courseCode);
+    } else if (event.target.classList.contains("cart-remove")) {
+        const courseCode = event.target.dataset.course;
+        removeFromCart(courseCode);
+    } else if (event.target.id === "clear-cart") {
+        clearCart();
+    }
+});
+
+function addToCart(courseCode) {
+    const course = coursesData.find(course => course.courseCode === courseCode);
+    const sectionName = event.target.dataset.section;
+    if (course) {
+        const courseWithSection = `${course.courseCode}-${sectionName || "N/A"}`;
+        if (!cart.includes(courseWithSection)) {
+            cart.push(courseWithSection);
+            updateCartDisplay();
+        }
+    }
+}
+
+function removeFromCart(courseCode) {
+    cart = cart.filter(course => course !== courseCode);
+    updateCartDisplay();
+}
+
+function clearCart() {
+    cart = [];
+    updateCartDisplay();
+}
+
+function updateCartDisplay() {
+    const cartElement = document.getElementById("cart");
+    const cartItems = document.getElementById("cart-items");
+
+    cartItems.innerHTML = "";
+    cart.forEach(course => {
+        const li = document.createElement("li");
+        li.innerHTML = `${course} <span class="cart-remove" data-course="${course}">❌</span>`;
+        cartItems.appendChild(li);
+    });
+
+    cartElement.style.display = cart.length > 0 ? "block" : "none";
 }
