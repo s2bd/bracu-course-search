@@ -29,16 +29,34 @@ function displayCourses(courses) {
         const finalExam = formatExamDate(course.sectionSchedule.finalExamDate, course.sectionSchedule.finalExamStartTime, course.sectionSchedule.finalExamEndTime);
         const midExam = formatExamDate(course.sectionSchedule.midExamDate, course.sectionSchedule.midExamStartTime, course.sectionSchedule.midExamEndTime);
 
+        const remainingSeats = course.capacity - course.consumedSeat;
+        let seatsClass = '';
+        let buttonDisabled = '';
+        if (remainingSeats === course.capacity) {
+            seatsClass = 'seats-white'; // All seats available (40/40)
+        } else if (remainingSeats > course.capacity * 0.75) {
+            seatsClass = 'seats-green'; // More than 75% seats available (green)
+        } else if (remainingSeats > course.capacity * 0.5) {
+            seatsClass = 'seats-yellow'; // More than 50% but less than 75% (yellow)
+        } else if (remainingSeats > 0) {
+            seatsClass = 'seats-red'; // Less than 50% seats available (red)
+        } else {
+            seatsClass = 'seats-black'; // No seats available (0/40)
+            buttonDisabled = 'disabled'; // Disable the button if no seats are available
+        }
+
         const row = document.createElement("tr");
         row.innerHTML = `
             <td class="course-code" data-detail="${course.courseCode} ${courseTitle ? '- ' + courseTitle : ''}">
                 ${course.courseCode} <i class="fas fa-info-circle"></i>
             </td>
-            <td class="section">${course.sectionName || "N/A"}</td> <!-- New Section Column -->
+            <td class="section">${course.sectionName || "N/A"}</td>
             <td class="faculty" data-detail="${course.faculties} ${empName ? '- ' + empName : ''}">
                 ${course.faculties} <i class="fas fa-user"></i>
             </td>
-            <td><i class="fas fa-chair"></i> ${course.capacity - course.consumedSeat}/${course.capacity}</td>
+            <td class="${seatsClass}">
+                <i class="fas fa-chair"></i> ${remainingSeats}/${course.capacity}
+            </td>
             <td>
                 ${formatSchedule(course.sectionSchedule.classSchedules, 'schedule')}
             </td>
@@ -49,7 +67,9 @@ function displayCourses(courses) {
                 <span class="exam-tooltip" data-tooltip="Midterm Exam: ${midExam}">${midExam.split(",")[0]}</span>
                 <span class="exam-tooltip" data-tooltip="Final Exam: ${finalExam}">${finalExam.split(",")[0]}</span>
             </td>
-            <td><button class="add-to-cart" data-course="${course.courseCode}" data-section="${course.sectionName || 'N/A'}">➕</button></td>
+            <td>
+                <button class="add-to-cart" data-course="${course.courseCode}" data-section="${course.sectionName || 'N/A'}" ${buttonDisabled}>➕</button>
+            </td>
         `;
         
         tableBody.appendChild(row);
@@ -100,6 +120,8 @@ function toggleAboutPanel() {
             <br><br>
             Made by <a href="https://dewanmukto.com/home" target="_blank">Dewan Mukto</a><br>
             SLMS data from <a href="https://usis.eniamza.com/" target="_blank">USIS Unlocked</a> by <a href="https://eniamza.com/" target="_blank">Tashfeen Azmaine</a>
+            <br>
+            Routine builder from <a href="https://preprereg.vercel.app/" target="_blank">PrePreReg</a> by <a href="https://eniac00.github.io/terminal-portfolio/" target="_blank">Abir Ahammed Bhuiyan</a>
              <br><br>
              Tap/click again to close
         `;
