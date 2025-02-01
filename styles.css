@@ -6,7 +6,7 @@ body {
     padding: 0;
     display: block;
     min-height: 100vh;
-    background: linear-gradient(135deg, #667eea, #764ba2);
+    background: linear-gradient(35deg, #571782, #1F1782);
     color: #fff;
 }
 
@@ -91,13 +91,13 @@ tbody tr:hover {
     position: relative;
     font-weight: bold;
     cursor: pointer;
-    color: #ffeb3b;
+    color: #000000;
     transition: 0.3s;
     text-shadow: 0 0 10px #ffeb3b;
 }
 
 .faculty {
-  color: #00fbff;
+  color: #000000;
   text-shadow: 0 0 10px #00fbff;
 }
 
