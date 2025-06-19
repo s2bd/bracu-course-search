@@ -1,72 +1,75 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="light" id="theme">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BRACU Course Search</title>
     <meta name="description" content="Search engine for information about courses, faculties, seats, schedules, etc. for BRAC University.">
     <meta name="keywords" content="bracu course search, bracu unlocked, usis unlocked, connect unlocked, bracu connect, usis eniamza, preprereg eniamza">
-    <meta name="author" content="Dewan Mukto">
+    <meta name="author" content="Stoobid">
     <meta name="robots" content="index, follow">
     <meta property="og:title" content="BRACU Course Search">
     <meta property="og:description" content="Search engine for information about courses, faculties, seats, schedules, etc. for BRAC University.">
     <meta property="og:image" content="ogimage.png">
-    <meta property="og:url" content="https://bracu.muxday.com">
+    <meta property="og:url" content="https://courses.bracu.mux8.com">
     <meta property="og:type" content="website">
     <meta property="og:locale" content="en_US">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:site" content="@dewan_mukto">
+    <meta name="twitter:site" content="@ditilrocks">
     <meta name="twitter:title" content="BRACU Course Search">
     <meta name="twitter:description" content="Search engine for information about courses, faculties, seats, schedules, etc. for BRAC University.">
     <meta name="twitter:image" content="ogimage.png">
     <link rel="icon" href="favicon.ico" type="image/x-icon">
     <link rel="icon" href="favicon.png" type="image/png">
     <link rel="apple-touch-icon" href="favicon.png">
-    <link rel="apple-touch-icon" sizes="152x152" href="favicon.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="favicon.png">
-    <link rel="apple-touch-icon" sizes="167x167" href="favicon.png">
-    <!-- TailwindCSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Custom CSS for animations and pseudo-elements -->
+    <script>
+        // Theme toggle logic
+        document.addEventListener('DOMContentLoaded', () => {
+            const themeToggle = document.getElementById('theme-toggle');
+            const html = document.documentElement;
+            const currentTheme = localStorage.getItem('theme') || 'light';
+            html.classList.add(currentTheme);
+            themeToggle.innerHTML = currentTheme === 'light' ? '🌙' : '☀️';
+            
+            themeToggle.addEventListener('click', () => {
+                if (html.classList.contains('light')) {
+                    html.classList.remove('light');
+                    html.classList.add('dark');
+                    localStorage.setItem('theme', 'dark');
+                    themeToggle.innerHTML = '☀️';
+                } else {
+                    html.classList.remove('dark');
+                    html.classList.add('light');
+                    localStorage.setItem('theme', 'light');
+                    themeToggle.innerHTML = '🌙';
+                }
+            });
+        });
+    </script>
     <style>
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .course-code:hover::after, .faculty:hover::after {
-            content: attr(data-detail);
+        /* Custom tooltip styles */
+        [data-tooltip]:hover::after {
+            content: attr(data-tooltip);
             position: absolute;
-            left: 0;
-            top: 30px;
-            background: rgba(0, 0, 0, 0.8);
-            color: white;
-            padding: 5px;
-            border-radius: 5px;
-            white-space: nowrap;
-            z-index: 9999;
-        }
-        .schedule:hover::after, .lab-schedule:hover::after, .exam-day:hover::after {
-            content: attr(data-full);
-            position: absolute;
+            top: 100%;
             left: 50%;
             transform: translateX(-50%);
-            top: 30px;
             background: rgba(0, 0, 0, 0.8);
             color: white;
-            padding: 5px;
-            border-radius: 5px;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
             white-space: nowrap;
-            z-index: 9999;
+            z-index: 50;
         }
-        .about-panel:hover::after {
-            content: ' - About this website';
-            color: #aaa;
-        }
-        .about-panel.expanded::after {
-            content: '';
-        }
+        /* Seat color classes */
+        .seats-white { color: white; }
+        .seats-green { color: #00ff00; }
+        .seats-yellow { color: yellow; }
+        .seats-red { color: red; }
+        .seats-black { color: black; }
     </style>
-    <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-5P9177K93X"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
@@ -76,134 +79,117 @@
     </script>
     <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 </head>
-<body class="font-poppins m-0 p-0 min-h-screen bg-gradient-to-br from-[#571782] to-[#1F1782] text-white">
-    <div class="container w-[90%] max-w-5xl bg-white/10 p-5 rounded-2xl shadow-lg backdrop-blur-md text-center animate-fadeIn relative overflow-visible mx-auto">
-        <header class="mb-5">
-            <h1 class="text-[5vw] max-[48px] text-shadow-[0_0_20px_#fff,0_0_30px_#ff00cc,0_0_40px_#ff00cc]">📚 BRACU Course Search</h1>
-        </header>
-        <input type="text" id="search" placeholder="🔍 Search... course codes, e.g. CSE or faculty code, e.g. FHZ" oninput="filterCourses()" class="w-full max-w-xl p-3 text-lg border-none rounded-lg mb-5 bg-black/20 text-white shadow-[0_0_10px_rgba(255,255,255,0.5)] backdrop-blur-sm transition-shadow duration-300 focus:shadow-[0_0_20px_rgba(255,255,255,0.8)] focus:outline-none">
-        <div class="table-container overflow-x-auto max-h-[500px] mt-5">
-            <p id="loadingMessage">Please wait while the content loads up...</p>
-            <table class="w-full border-collapse rounded-xl bg-white/10 backdrop-blur-sm">
+<body class="font-sans bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 min-h-screen flex flex-col">
+    <!-- Header -->
+    <header class="bg-white dark:bg-gray-800 shadow-md sticky top-0 z-40">
+        <nav class="container mx-auto px-4 py-3 flex items-center justify-between">
+            <div class="flex items-center space-x-2">
+                <img src="logo.png" alt="BRACU Logo" class="h-8" onerror="this.src='https://via.placeholder.com/32'"> <!-- Replace with actual logo -->
+                <h1 class="text-xl font-semibold">BRACU Course Search</h1>
+            </div>
+            <div class="flex items-center space-x-4">
+                <button id="theme-toggle" class="text-2xl focus:outline-none" aria-label="Toggle theme">🌙</button>
+                <button id="toggle-cart" class="text-2xl focus:outline-none" aria-label="Toggle cart">🛒</button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8 flex-1">
+        <!-- Search and Filters -->
+        <section class="mb-8">
+            <div class="flex flex-col sm:flex-row gap-4">
+                <input type="text" id="search" placeholder="Search by course code (e.g., CSE) or faculty (e.g., FHZ)" oninput="filterCourses()" class="flex-1 p-3 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent" aria-label="Search courses">
+                <select id="department-filter" class="p-3 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100" aria-label="Filter by department">
+                    <option value="">All Departments</option>
+                    <!-- Populate dynamically if needed -->
+                </select>
+            </div>
+        </section>
+
+        <!-- Course List -->
+        <section class="mb-8">
+            <p id="loadingMessage" class="text-center text-gray-600 dark:text-gray-400">Loading courses...</p>
+            <div id="courseList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Courses populated by JS -->
+            </div>
+        </section>
+
+        <!-- Routine Table -->
+        <section class="mb-8 relative">
+            <div class="overlay absolute inset-0 bg-black/50 flex items-center justify-center rounded-lg z-10 backdrop-blur-sm">
+                <div class="text-center text-white">
+                    <h2 class="text-3xl font-bold mb-4">🚧 Coming Soon</h2>
+                    <p class="text-lg">Use <a href="https://preprereg.vercel.app/" target="_blank" class="text-blue-400 hover:underline">PrePreReg</a> for now.</p>
+                </div>
+            </div>
+            <table id="data_table" class="w-full border-collapse bg-white dark:bg-gray-800 rounded-lg shadow-md">
                 <thead>
-                    <tr>
-                        <th class="p-3 text-left text-sm bg-white/20 font-bold text-black uppercase">Course Code</th>
-                        <th class="p-3 text-left text-sm bg-white/20 font-bold text-black uppercase">Section</th>
-                        <th class="p-3 text-left text-sm bg-white/20 font-bold text-black uppercase">Faculty</th>
-                        <th class="p-3 text-left text-sm bg-white/20 font-bold text-black uppercase">Seats Remaining</th>
-                        <th class="p-3 text-left text-sm bg-white/20 font-bold text-black uppercase">Class Schedule</th>
-                        <th class="p-3 text-left text-sm bg-white/20 font-bold text-black uppercase">Lab Schedule</th>
-                        <th class="p-3 text-left text-sm bg-white/20 font-bold text-black uppercase">Exam Days</th>
-                        <th class="p-3 text-left text-sm bg-white/20 font-bold text-black uppercase">Add</th>
+                    <tr class="bg-gray-200 dark:bg-gray-700">
+                        <th class="p-3 text-left font-semibold">Time/Day</th>
+                        <th class="p-3 text-left font-semibold">Sunday</th>
+                        <th class="p-3 text-left font-semibold">Monday</th>
+                        <th class="p-3 text-left font-semibold">Tuesday</th>
+                        <th class="p-3 text-left font-semibold">Wednesday</th>
+                        <th class="p-3 text-left font-semibold">Thursday</th>
+                        <th class="p-3 text-left font-semibold">Friday</th>
+                        <th class="p-3 text-left font-semibold">Saturday</th>
                     </tr>
                 </thead>
-                <tbody id="courseTable">
-                    <!-- Dynamic data here -->
+                <tbody>
+                    <tr id="row1">
+                        <td class="p-3 font-medium">08:00 AM-09:20 AM</td>
+                        <td id="1-1"></td><td id="1-2"></td><td id="1-3"></td><td id="1-4"></td><td id="1-5"></td><td id="1-6"></td><td id="1-7"></td>
+                    </tr>
+                    <tr id="row2">
+                        <td class="p-3 font-medium">09:30 AM-10:50 AM</td>
+                        <td id="2-1"></td><td id="2-2"></td><td id="2-3"></td><td id="2-4"></td><td id="2-5"></td><td id="2-6"></td><td id="2-7"></td>
+                    </tr>
+                    <tr id="row3">
+                        <td class="p-3 font-medium">11:00 AM-12:20 PM</td>
+                        <td id="3-1"></td><td id="3-2"></td><td id="3-3"></td><td id="3-4"></td><td id="3-5"></td><td id="3-6"></td><td id="3-7"></td>
+                    </tr>
+                    <tr id="row4">
+                        <td class="p-3 font-medium">12:30 PM-01:50 PM</td>
+                        <td id="4-1"></td><td id="4-2"></td><td id="4-3"></td><td id="4-4"></td><td id="4-5"></td><td id="4-6"></td><td id="4-7"></td>
+                    </tr>
+                    <tr id="row5">
+                        <td class="p-3 font-medium">02:00 PM-03:20 PM</td>
+                        <td id="5-1"></td><td id="5-2"></td><td id="5-3"></td><td id="5-4"></td><td id="5-5"></td><td id="5-6"></td><td id="5-7"></td>
+                    </tr>
+                    <tr id="row6">
+                        <td class="p-3 font-medium">03:30 PM-04:50 PM</td>
+                        <td id="6-1"></td><td id="6-2"></td><td id="6-3"></td><td id="6-4"></td><td id="6-5"></td><td id="6-6"></td><td id="6-7"></td>
+                    </tr>
+                    <tr id="row7">
+                        <td class="p-3 font-medium">05:00 PM-06:20 PM</td>
+                        <td id="7-1"></td><td id="7-2"></td><td id="7-3"></td><td id="7-4"></td><td id="7-5"></td><td id="7-6"></td><td id="7-7"></td>
+                    </tr>
                 </tbody>
             </table>
+        </section>
+    </main>
+
+    <!-- Cart Sidebar -->
+    <aside id="cart" class="fixed top-0 right-0 h-full w-80 bg-white dark:bg-gray-800 shadow-lg transform translate-x-full transition-transform duration-300 z-50">
+        <div class="p-4">
+            <button id="close-cart" class="text-2xl mb-4 focus:outline-none" aria-label="Close cart">✖</button>
+            <h2 class="text-lg font-semibold mb-4">Selected Courses</h2>
+            <ul id="cart-items" class="space-y-2"></ul>
+            <button id="clear-cart" class="w-full mt-4 bg-red-500 text-white py-2 rounded-lg hover:bg-red-600 transition-colors">Clear All</button>
         </div>
-    </div>
-    <div id="cart" class="fixed bottom-5 right-5 w-64 bg-black/80 text-white p-4 rounded-lg shadow-[0_4px_10px_rgba(0,0,0,0.5)] hidden transition-all duration-300 z-[999]">
-        <h2 class="text-base mb-2">🛒 Selected Courses</h2>
-        <ul id="cart-items" class="list-none p-0 m-0"></ul>
-        <button id="clear-cart" class="bg-red-500 text-white border-none p-1 cursor-pointer w-full rounded-md mt-2">Clear All</button>
-    </div>
-    <br />
-    <div class="routine-table block mt-8 w-full text-center z-0">
-        <div class="overlay absolute top-0 left-0 w-full h-full bg-black/40 flex justify-center items-center backdrop-blur-md z-[2]">
-            <div class="overlay-content text-center text-white">
-                <h2 class="text-4xl mb-5">🚧 Coming Soon 🚧</h2>
-                <p class="text-xl m-0">Meanwhile, please use <a href="https://preprereg.vercel.app/" target="_blank" class="text-cyan-300 font-bold hover:underline">PrePreReg</a></p>
-            </div>
+    </aside>
+
+    <!-- Footer -->
+    <footer class="bg-gray-200 dark:bg-gray-800 py-4 mt-auto">
+        <div class="container mx-auto px-4 text-center text-gray-600 dark:text-gray-400">
+            <p>Made by <a href="https://dewanmukto.com/home" target="_blank" class="text-blue-600 dark:text-blue-400 hover:underline">Dewan Mukto</a></p>
+            <p>Data from <a href="https://usis.eniamza.com/" target="_blank" class="text-blue-600 dark:text-blue-400 hover:underline">USIS Unlocked</a> by <a href="https://eniamza.com/" target="_blank" class="text-blue-600 dark:text-blue-400 hover:underline">Tashfeen Azmaine</a></p>
+            <p>Routine table from <a href="https://preprereg.vercel.app/" target="_blank" class="text-blue-600 dark:text-blue-400 hover:underline">PrePreReg</a> by <a href="https://eniac00.github.io/terminal-portfolio/" target="_blank" class="text-blue-600 dark:text-blue-400 hover:underline">Abir Ahammed Bhuiyan</a></p>
         </div>
-        <table align="center" cellspacing="2" cellpadding="10" id="data_table" border="1" class="w-[90%] max-w-5xl bg-white/10 p-5 rounded-2xl shadow-lg backdrop-blur-md mx-auto">
-            <tbody>
-                <tr>
-                    <th class="p-3 text-left text-sm bg-white/20 font-bold text-black uppercase">Time/Day</th>
-                    <th class="p-3 text-left text-sm bg-white/20 font-bold text-black uppercase">Sunday</th>
-                    <th class="p-3 text-left text-sm bg-white/20 font-bold text-black uppercase">Monday</th>
-                    <th class="p-3 text-left text-sm bg-white/20 font-bold text-black uppercase">Tuesday</th>
-                    <th class="p-3 text-left text-sm bg-white/20 font-bold text-black uppercase">Wednesday</th>
-                    <th class="p-3 text-left text-sm bg-white/20 font-bold text-black uppercase">Thursday</th>
-                    <th class="p-3 text-left text-sm bg-white/20 font-bold text-black uppercase">Friday</th>
-                    <th class="p-3 text-left text-sm bg-white/20 font-bold text-black uppercase">Saturday</th>
-                </tr>
-                <tr id="row1">
-                    <td class="p-3 font-bold">08:00 AM-09:20 AM</td>
-                    <td id="1-1"></td>
-                    <td id="1-2"></td>
-                    <td id="1-3"></td>
-                    <td id="1-4"></td>
-                    <td id="1-5"></td>
-                    <td id="1-6"></td>
-                    <td id="1-7"></td>
-                </tr>
-                <tr id="row2">
-                    <td class="p-3 font-bold">09:30 AM-10:50 AM</td>
-                    <td id="2-1"></td>
-                    <td id="2-2"></td>
-                    <td id="2-3"></td>
-                    <td id="2-4"></td>
-                    <td id="2-5"></td>
-                    <td id="2-6"></td>
-                    <td id="2-7"></td>
-                </tr>
-                <tr id="row3">
-                    <td class="p-3 font-bold">11:00 AM-12:20 PM</td>
-                    <td id="3-1"></td>
-                    <td id="3-2"></td>
-                    <td id="3-3"></td>
-                    <td id="3-4"></td>
-                    <td id="3-5"></td>
-                    <td id="3-6"></td>
-                    <td id="3-7"></td>
-                </tr>
-                <tr id="row4">
-                    <td class="p-3 font-bold">12:30 PM-01:50 PM</td>
-                    <td id="4-1"></td>
-                    <td id="4-2"></td>
-                    <td id="4-3"></td>
-                    <td id="4-4"></td>
-                    <td id="4-5"></td>
-                    <td id="4-6"></td>
-                    <td id="4-7"></td>
-                </tr>
-                <tr id="row5">
-                    <td class="p-3 font-bold">02:00 PM-03:20 PM</td>
-                    <td id="5-1"></td>
-                    <td id="5-2"></td>
-                    <td id="5-3"></td>
-                    <td id="5-4"></td>
-                    <td id="5-5"></td>
-                    <td id="5-6"></td>
-                    <td id="5-7"></td>
-                </tr>
-                <tr id="row6">
-                    <td class="p-3 font-bold">03:30 PM-04:50 PM</td>
-                    <td id="6-1"></td>
-                    <td id="6-2"></td>
-                    <td id="6-3"></td>
-                    <td id="6-4"></td>
-                    <td id="6-5"></td>
-                    <td id="6-6"></td>
-                    <td id="6-7"></td>
-                </tr>
-                <tr id="row7">
-                    <td class="p-3 font-bold">05:00 PM-06:20 PM</td>
-                    <td id="7-1"></td>
-                    <td id="7-2"></td>
-                    <td id="7-3"></td>
-                    <td id="7-4"></td>
-                    <td id="7-5"></td>
-                    <td id="7-6"></td>
-                    <td id="7-7"></td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-    <div class="about-panel fixed bottom-2 left-2 bg-black/60 p-2 rounded-md text-white text-xs z-[1000] transition-all duration-300 cursor-pointer overflow-hidden whitespace-nowrap max-w-[200px] hover:bg-black/80 hover:pr-6" onclick="toggleAboutPanel()">
-        Credits
-    </div>
+    </footer>
+
     <script src="script.js"></script>
+  
 </body>
 </html>
