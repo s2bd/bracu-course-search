@@ -1,4 +1,16 @@
 document.addEventListener("DOMContentLoaded", () => {
+    const cart = document.getElementById("cart");
+    const toggleCart = document.getElementById("toggle-cart");
+    const closeCart = document.getElementById("close-cart");
+
+    toggleCart.addEventListener("click", () => {
+        cart.classList.toggle("translate-x-full");
+    });
+
+    closeCart.addEventListener("click", () => {
+        cart.classList.add("translate-x-full");
+    });
+
     fetchCourses();
 });
 
@@ -20,8 +32,8 @@ async function fetchCourses() {
 }
 
 function displayCourses(courses) {
-    const tableBody = document.getElementById("courseTable");
-    tableBody.innerHTML = "";
+    const courseList = document.getElementById("courseList");
+    courseList.innerHTML = "";
     courses.forEach(course => {
         const secondaryCourse = secondaryData.find(sec => sec.courseCode === course.courseCode);
         const secondaryFaculty = secondaryData.find(sec => sec.empShortName === course.faculties);
@@ -35,47 +47,45 @@ function displayCourses(courses) {
         let seatsClass = '';
         let buttonDisabled = '';
         if (remainingSeats === course.capacity) {
-            seatsClass = 'seats-white'; // All seats available (40/40)
+            seatsClass = 'seats-white';
         } else if (remainingSeats > course.capacity * 0.75) {
-            seatsClass = 'seats-green'; // More than 75% seats available (green)
+            seatsClass = 'seats-green';
         } else if (remainingSeats > course.capacity * 0.5) {
-            seatsClass = 'seats-yellow'; // More than 50% but less than 75% (yellow)
+            seatsClass = 'seats-yellow';
         } else if (remainingSeats > 0) {
-            seatsClass = 'seats-red'; // Less than 50% seats available (red)
+            seatsClass = 'seats-red';
         } else {
-            seatsClass = 'seats-black'; // No seats available (0/40)
-            buttonDisabled = 'disabled'; // Disable the button if no seats are available
+            seatsClass = 'seats-black';
+            buttonDisabled = 'disabled';
         }
 
-        const row = document.createElement("tr");
-        row.innerHTML = `
-            <td class="course-code" data-detail="${course.courseCode} ${courseTitle ? '- ' + courseTitle : ''}">
-                ${course.courseCode} <i class="fas fa-info-circle"></i>
-            </td>
-            <td class="section">${course.sectionName || "N/A"}</td>
-            <td class="faculty" data-detail="${course.faculties} ${empName ? '- ' + empName : ''}">
-                ${course.faculties} <i class="fas fa-user"></i>
-            </td>
-            <td class="${seatsClass}">
-                <i class="fas fa-chair"></i> ${remainingSeats}/${course.capacity}
-            </td>
-            <td>
-                ${formatSchedule(course.sectionSchedule.classSchedules, 'schedule')}
-            </td>
-            <td>
-                ${formatSchedule(course.labSchedules, 'lab-schedule')}
-            </td>
-            <td class="exam-day" data-full="Mid Exam: ${midExam}\nFinal Exam: ${finalExam}">
-                <span class="exam-tooltip" data-tooltip="Midterm Exam: ${midExam}">${midExam.split(",")[0]}</span>
-                <span class="exam-tooltip" data-tooltip="Final Exam: ${finalExam}">${finalExam.split(",")[0]}</span>
-            </td>
-            <td>
-                <button class="add-to-cart" data-course="${course.courseCode}" data-section="${course.sectionName || 'N/A'}" ${buttonDisabled}>➕</button>
-            </td>
+        const card = document.createElement("div");
+        card.className = "bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 hover:shadow-lg transition-shadow duration-300";
+        card.innerHTML = `
+            <h3 class="text-lg font-semibold mb-2" data-tooltip="${course.courseCode} - ${courseTitle}">
+                ${course.courseCode} <i class="fas fa-info-circle text-blue-500"></i>
+            </h3>
+            <p class="text-sm text-gray-600 dark:text-gray-400">Section: ${course.sectionName || "N/A"}</p>
+            <p class="text-sm text-gray-600 dark:text-gray-400" data-tooltip="${course.faculties} - ${empName}">
+                Faculty: ${course.faculties} <i class="fas fa-user text-blue-500"></i>
+            </p>
+            <p class="text-sm ${seatsClass} mt-2">
+                <i class="fas fa-chair"></i> Seats: ${remainingSeats}/${course.capacity}
+            </p>
+            <div class="text-sm mt-2">
+                <p>Class: ${formatSchedule(course.sectionSchedule.classSchedules, 'schedule')}</p>
+                <p>Lab: ${formatSchedule(course.labSchedules, 'lab-schedule')}</p>
+                <p data-tooltip="Mid: ${midExam}, Final: ${finalExam}">
+                    Exams: ${midExam.split(",")[0]} / ${finalExam.split(",")[0]}
+                </p>
+            </div>
+            <button class="add-to-cart mt-4 w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition-colors ${buttonDisabled}" data-course="${course.courseCode}" data-section="${course.sectionName || 'N/A'}">
+                Add to Cart <i class="fas fa-plus"></i>
+            </button>
         `;
-        
-        tableBody.appendChild(row);
+        courseList.appendChild(card);
     });
+    document.getElementById("loadingMessage").style.display = "none";
 }
 
 function formatSchedule(schedule, className) {
@@ -175,9 +185,10 @@ function updateCartDisplay() {
     cartItems.innerHTML = "";
     cart.forEach(course => {
         const li = document.createElement("li");
-        li.innerHTML = `${course} <span class="cart-remove" data-course="${course}">❌</span>`;
+        li.className = "flex justify-between items-center p-2 bg-gray-100 dark:bg-gray-700 rounded";
+        li.innerHTML = `${course} <span class="cart-remove text-red-500 cursor-pointer" data-course="${course}">❌</span>`;
         cartItems.appendChild(li);
     });
 
-    cartElement.style.display = cart.length > 0 ? "block" : "none";
+    cartElement.classList.toggle("translate-x-full", cart.length === 0);
 }
