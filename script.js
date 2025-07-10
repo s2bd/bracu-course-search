@@ -1,14 +1,9 @@
 document.addEventListener("DOMContentLoaded", () => {
     const cart = document.getElementById("cart");
     const toggleCart = document.getElementById("toggle-cart");
-    const closeCart = document.getElementById("close-cart");
 
     toggleCart.addEventListener("click", () => {
-        cart.classList.toggle("translate-x-full");
-    });
-
-    closeCart.addEventListener("click", () => {
-        cart.classList.add("translate-x-full");
+        cart.classList.toggle("hidden");
     });
 
     fetchCourses();
@@ -46,7 +41,7 @@ function displayCourses(courses) {
 
         const remainingSeats = course.capacity - course.consumedSeat;
         let seatsClass = '';
-        let buttonDisabled = '';
+        let buttonDisabled = remainingSeats <= 0 ? 'disabled' : '';
         if (remainingSeats === course.capacity) {
             seatsClass = 'seats-white';
         } else if (remainingSeats > course.capacity * 0.75) {
@@ -57,7 +52,6 @@ function displayCourses(courses) {
             seatsClass = 'seats-red';
         } else {
             seatsClass = 'seats-black';
-            buttonDisabled = 'disabled';
         }
 
         const card = document.createElement("div");
@@ -77,7 +71,7 @@ function displayCourses(courses) {
                 <p>Lab: ${formatSchedule(course.labSchedules, 'lab-schedule')}</p>
                 <p>Exams: ${midExam.split(",")[0]} / ${finalExam.split(",")[0]}</p>
             </div>
-            <button class="add-to-cart mt-4 w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition-colors ${buttonDisabled}" data-course="${course.courseCode}" data-section="${course.sectionName || 'N/A'}">
+            <button class="add-to-cart mt-4 w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition-colors" ${buttonDisabled} data-course="${course.courseCode}" data-section="${course.sectionName || 'N/A'}">
                 Add to Cart <i class="fas fa-plus"></i>
             </button>
         `;
@@ -90,7 +84,9 @@ function populateRoutineTable() {
     // Clear existing table content
     for (let row = 1; row <= 7; row++) {
         for (let col = 1; col <= 7; col++) {
-            document.getElementById(`${row}-${col}`).innerHTML = '';
+            const cell = document.getElementById(`${row}-${col}`);
+            cell.innerHTML = '';
+            cell.classList.remove('bg-blue-100', 'dark:bg-blue-900', 'bg-green-100', 'dark:bg-green-900', 'p-2', 'rounded');
         }
     }
 
@@ -98,28 +94,36 @@ function populateRoutineTable() {
     cart.forEach(courseWithSection => {
         const [courseCode, sectionName] = courseWithSection.split('-');
         const course = coursesData.find(c => c.courseCode === courseCode && (c.sectionName || 'N/A') === sectionName);
-        if (course) {
-            // Process class schedules
-            if (course.sectionSchedule.classSchedules) {
-                course.sectionSchedule.classSchedules.forEach(({ day, startTime }) => {
+        if (course && course.preRegSchedule) {
+            // Parse preRegSchedule (e.g., "MONDAY(11:00 AM-12:20 PM-09H-32C)\nWEDNESDAY(11:00 AM-12:20 PM-09H-32C)")
+            const schedules = course.preRegSchedule.split('\n');
+            schedules.forEach(schedule => {
+                const match = schedule.match(/(\w+)\((\d+:\d+\s[AP]M)-(\d+:\d+\s[AP]M)-([\w-]+)\)/);
+                if (match) {
+                    const [, day, startTime, , room] = match;
                     const timeSlot = getTimeSlot(startTime);
                     const dayIndex = getDayIndex(day);
                     if (timeSlot && dayIndex) {
                         const cell = document.getElementById(`${timeSlot}-${dayIndex}`);
-                        cell.innerHTML = `${course.courseCode} (${course.sectionName || 'N/A'})`;
+                        cell.innerHTML = `${course.courseCode} (${course.sectionName || 'N/A'})<br>${room}`;
                         cell.classList.add('bg-blue-100', 'dark:bg-blue-900', 'p-2', 'rounded');
                     }
-                });
-            }
-            // Process lab schedules
-            if (course.labSchedules) {
-                course.labSchedules.forEach(({ day, startTime }) => {
-                    const timeSlot = getTimeSlot(startTime);
-                    const dayIndex = getDayIndex(day);
-                    if (timeSlot && dayIndex) {
-                        const cell = document.getElementById(`${timeSlot}-${dayIndex}`);
-                        cell.innerHTML = `${course.courseCode} Lab (${course.sectionName || 'N/A'})`;
-                        cell.classList.add('bg-green-100', 'dark:bg-green-900', 'p-2', 'rounded');
+                }
+            });
+            // Handle lab schedules if present
+            if (course.preRegLabSchedule) {
+                const labSchedules = course.preRegLabSchedule.split('\n');
+                labSchedules.forEach(schedule => {
+                    const match = schedule.match(/(\w+)\((\d+:\d+\s[AP]M)-(\d+:\d+\s[AP]M)-([\w-]+)\)/);
+                    if (match) {
+                        const [, day, startTime, , room] = match;
+                        const timeSlot = getTimeSlot(startTime);
+                        const dayIndex = getDayIndex(day);
+                        if (timeSlot && dayIndex) {
+                            const cell = document.getElementById(`${timeSlot}-${dayIndex}`);
+                            cell.innerHTML = `${course.courseCode} Lab (${course.sectionName || 'N/A'})<br>${room}`;
+                            cell.classList.add('bg-green-100', 'dark:bg-green-900', 'p-2', 'rounded');
+                        }
                     }
                 });
             }
@@ -128,7 +132,14 @@ function populateRoutineTable() {
 }
 
 function getTimeSlot(startTime) {
-    const [hour, minute] = startTime.split(':').map(Number);
+    // Parse time in "HH:MM AM/PM" format
+    const match = startTime.match(/(\d+):(\d+)\s([AP]M)/);
+    if (!match) return null;
+    let [_, hour, minute, period] = match;
+    hour = parseInt(hour);
+    minute = parseInt(minute);
+    if (period === 'PM' && hour !== 12) hour += 12;
+    if (period === 'AM' && hour === 12) hour = 0;
     const time = hour * 60 + minute;
     if (time >= 480 && time < 560) return 1; // 08:00 AM - 09:20 AM
     if (time >= 570 && time < 650) return 2; // 09:30 AM - 10:50 AM
@@ -141,9 +152,10 @@ function getTimeSlot(startTime) {
 }
 
 function getDayIndex(day) {
-    const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-    return days.indexOf(day) + 1;
+    const days = ['SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY'];
+    return days.indexOf(day.toUpperCase()) + 1;
 }
+
 function formatSchedule(schedule, className) {
     if (!schedule || !schedule.length) return "";
     return schedule.map(({ day, startTime, endTime }) => {
@@ -213,39 +225,43 @@ document.addEventListener("click", (event) => {
 });
 
 function addToCart(courseCode) {
-    const course = coursesData.find(course => course.courseCode === courseCode);
     const sectionName = event.target.dataset.section;
-    if (course) {
-        const courseWithSection = `${course.courseCode}-${sectionName || "N/A"}`;
-        if (!cart.includes(courseWithSection)) {
-            cart.push(courseWithSection);
-            updateCartDisplay();
-        }
+    const courseWithSection = `${courseCode}-${sectionName || "N/A"}`;
+    if (!cart.includes(courseWithSection)) {
+        cart.push(courseWithSection);
+        updateCartDisplay();
+        populateRoutineTable();
     }
 }
 
 function removeFromCart(courseCode) {
     cart = cart.filter(course => course !== courseCode);
     updateCartDisplay();
+    populateRoutineTable(); // Update routine table when course is removed
 }
 
 function clearCart() {
     cart = [];
     updateCartDisplay();
+    populateRoutineTable(); // Clear routine table when cart is cleared
 }
 
 function updateCartDisplay() {
     const cartElement = document.getElementById("cart");
     const cartItems = document.getElementById("cart-items");
+    const clearCartButton = document.getElementById("clear-cart");
 
     cartItems.innerHTML = "";
     cart.forEach(course => {
         const li = document.createElement("li");
-        li.className = "flex justify-between items-center p-2 bg-gray-100 dark:bg-gray-700 rounded";
-        li.innerHTML = `${course} <span class="cart-remove text-red-500 cursor-pointer" data-course="${course}">❌</span>`;
+        li.className = "cart-item";
+        li.innerHTML = `
+            <span>${course}</span>
+            <span class="cart-remove" data-course="${course}">✖</span>
+        `;
         cartItems.appendChild(li);
     });
 
-    cartElement.classList.toggle("translate-x-full", cart.length === 0);
-    populateRoutineTable();
+    cartElement.classList.toggle("hidden", cart.length === 0);
+    clearCartButton.classList.toggle("hidden", cart.length === 0);
 }
