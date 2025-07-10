@@ -1,8 +1,5 @@
-# BRACU Course Search
-A better frontend for viewing info about course sections, instructors, schedules, etc. from BRAC University Connect (ex. USIS) SLMS.
-
-> [!CAUTION]
-> This current version is unstable and deemed unworthy of usage. So please do NOT use it!
+# Bracourse.
+A better frontend for viewing info about course sections, instructors, schedules, etc. from BRAC University Connect (ex. USIS) SLMS. And also allows a quick way of previewing what your schedule/routine would look like based on your course selections.
 
 > [!NOTE]
 > This is not an official platform authorized nor endorsed by BRAC University. Just use it if you want.
