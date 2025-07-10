@@ -1,352 +1,102 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+<style>
+    /* Seat color classes */
+    .seats-white { color: white; background-color: green;}
+    .seats-green { color: black; background-color: #0fff0f;}
+    .seats-yellow { color: black; background-color: yellow;}
+    .seats-red { color: white; background-color: red;}
+    .seats-black { color: black; background-color: white;}
 
-body {
-    font-family: 'Poppins', sans-serif;
-    margin: 0;
-    padding: 0;
-    display: block;
-    min-height: 100vh;
-    background: linear-gradient(35deg, #571782, #1F1782);
-    color: #fff;
-}
-
-.container, .routine-table {
-    width: 90%;
-    max-width: 1200px;
-    background: rgba(255, 255, 255, 0.1);
-    padding: 20px;
-    border-radius: 15px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(10px);
-    text-align: center;
-    animation: fadeIn 1s ease-in-out;
-    position: relative;
-    overflow: visible;
-    margin: 0 auto;
-}
-
-header {
-    margin-bottom: 20px;
-}
-
-h1 {
-    font-size: 5vw;
-    max-font-size: 48px;
-    text-shadow: 0 0 20px #fff, 0 0 30px #ff00cc, 0 0 40px #ff00cc;
-}
-
-input {
-    width: 100%;
-    max-width: 600px;
-    padding: 12px;
-    font-size: 1.2rem;
-    border: none;
-    border-radius: 8px;
-    margin-bottom: 20px;
-    background: rgba(0, 0, 0, 0.2);
-    color: #ffffff;
-    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
-    backdrop-filter: blur(5px);
-    transition: box-shadow 0.3s ease;
-}
-
-input:focus {
-    box-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
-    outline: none;
-}
-
-.table-container {
-    overflow-x: auto;
-    max-height: 500px;
-    margin-top: 20px;
-}
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-    border-radius: 12px;
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(5px);
-}
-
-th, td {
-    padding: 10px 15px;
-    text-align: left;
-    font-size: 1rem;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
-}
-
-th {
-    background: rgba(255, 255, 255, 0.2);
-    font-weight: bold;
-    color: #000;
-    text-transform: uppercase;
-}
-
-tbody tr:hover {
-    background: rgba(255, 255, 255, 0.1);
-}
-
-.course-code, .faculty, .section {
-    position: relative;
-    font-weight: bold;
-    cursor: pointer;
-    color: #000000;
-    transition: 0.3s;
-    text-shadow: 0 0 10px #ffeb3b;
-}
-
-.faculty {
-  color: #000000;
-  text-shadow: 0 0 10px #00fbff;
-}
-
-.course-code:hover {
-    text-shadow: 0 0 15px #ffeb3b, 0 0 30px #ffeb3b;
-}
-
-.faculty:hover {
-    text-shadow: 0 0 15px #00fbff, 0 0 30px #00fbff;
-}
-
-.course-code:hover::after, .faculty:hover::after {
-    content: attr(data-detail);
-    position: absolute;
-    left: 0;
-    top: 30px;
-    background: rgba(0, 0, 0, 0.8);
-    color: white;
-    padding: 5px;
-    border-radius: 5px;
-    white-space: nowrap;
-    z-index: 9999; /* Added z-index */
-}
-
-.schedule, .lab-schedule, .exam-day {
-    display: inline-block;
-    padding: 5px 10px;
-    margin: 2px;
-    border-radius: 12px;
-    background: rgba(255, 255, 255, 0.2);
-    cursor: pointer;
-    font-weight: bold;
-    color: #000000;
-    position: relative;
-    box-shadow: 0 0 10px rgba(255, 255, 255, 0.4);
-    backdrop-filter: blur(5px);
-    transition: 0.3s;
-}
-
-.schedule:hover, .lab-schedule:hover, .exam-day:hover {
-    box-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
-    transform: scale(1.05);
-}
-
-.schedule:hover::after, .lab-schedule:hover::after, .exam-day:hover::after {
-    content: attr(data-full);
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    top: 30px;
-    background: rgba(0, 0, 0, 0.8);
-    color: white;
-    padding: 5px;
-    border-radius: 5px;
-    white-space: nowrap;
-    z-index: 9999; /* Added z-index */
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-20px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-@media (max-width: 768px) {
-    h1 {
-        font-size: 6vw;
+    /* Pill-shaped seat container */
+    .seat-pill {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 4px 12px;
+        border-radius: 9999px;
+        border: 2px solid black;
+        font-size: 0.875rem;
+        margin-top: 8px;
     }
 
-    input {
-        font-size: 1rem;
-        max-width: 90%;
+    /* Card entrance animation */
+    @keyframes slideIn {
+        0% {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        100% {
+            opacity: 1;
+            transform: translateY(0);
+        }
     }
 
-    table th, table td {
-        font-size: 1rem;
+    .course-card {
+        animation: slideIn 0.3s ease-out forwards;
     }
 
-    .table-container {
-        max-height: 400px;
-    }
-}
+    /* Delay animation for each card */
+    .course-card:nth-child(1) { animation-delay: 0s; }
+    .course-card:nth-child(2) { animation-delay: 0.1s; }
+    .course-card:nth-child(3) { animation-delay: 0.2s; }
+    .course-card:nth-child(4) { animation-delay: 0.3s; }
+    .course-card:nth-child(5) { animation-delay: 0.4s; }
+    .course-card:nth-child(6) { animation-delay: 0.5s; }
+    .course-card:nth-child(7) { animation-delay: 0.6s; }
+    .course-card:nth-child(8) { animation-delay: 0.7s; }
+    .course-card:nth-child(9) { animation-delay: 0.8s; }
+    .course-card:nth-child(10) { animation-delay: 0.9s; }
+    .course-card:nth-child(11) { animation-delay: 1.0s; }
+    .course-card:nth-child(12) { animation-delay: 1.1s; }
 
-@media (max-width: 480px) {
-    .container {
-        padding: 15px;
-    }
-
-    input {
-        font-size: 0.9rem;
-    }
-
-    table th, table td {
-        font-size: 0.9rem;
-    }
-
-    h1 {
-        font-size: 8vw;
-    }
-}
-
-.about-panel {
-    position: fixed;
-    bottom: 10px;
-    left: 10px;
-    background: rgba(0, 0, 0, 0.6);
-    padding: 10px 15px;
-    border-radius: 5px;
-    color: #fff;
-    font-size: 12px;
-    z-index: 1000;
-    transition: all 0.3s ease;
-    cursor: pointer;
-    overflow: hidden;
-    white-space: nowrap;
-    max-width: 200px;
-}
-
-.about-panel:hover {
-    padding-right: 25px;
-    background: rgba(0, 0, 0, 0.8);
-}
-
-.about-panel:hover::after {
-    content: ' - About this website';
-    color: #aaa;
-}
-
-.about-panel.expanded {
-    max-width: 400px;
-    white-space: normal;
-    padding: 20px;
-}
-
-.about-panel.expanded::after {
-    content: '';
-}
-
-.about-panel a {
-    color: #0aff45;
-    text-decoration: none;
-    transition: color 0.3s;
-}
-
-.about-panel a:hover {
-    color: #fff;
-}
-
+/* Cart overlay styles */
 #cart {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    width: 250px;
-    background: rgba(0, 0, 0, 0.8);
-    color: #fff;
-    padding: 15px;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-    display: none;
-    transition: all 0.3s ease-in-out;
-    z-index: 999;
+    max-width: 300px;
 }
 
-#cart h2 {
-    font-size: 16px;
-    margin-bottom: 10px;
-}
-
-#cart-items {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-#cart-items li {
+.cart-item {
     display: flex;
     justify-content: space-between;
-    padding: 5px 0;
+    align-items: center;
+    padding: 8px 12px;
+    background-color: #f3f4f6; /* Light gray for light mode */
+    border-radius: 12px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease-in-out;
+}
+
+.cart-item:hover {
+    transform: translateY(-2px);
+}
+
+.dark .cart-item {
+    background-color: #374151; /* Dark gray for dark mode */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .cart-remove {
     cursor: pointer;
-    color: red;
-    margin-left: 10px;
+    color: #ef4444; /* Red-500 */
+    font-size: 1rem;
+    line-height: 1;
+    transition: color 0.2s ease-in-out;
+}
+
+.cart-remove:hover {
+    color: #dc2626; /* Red-600 */
 }
 
 #clear-cart {
-    background: red;
-    color: white;
-    border: none;
-    padding: 5px;
-    cursor: pointer;
-    width: 100%;
-    border-radius: 5px;
-    margin-top: 10px;
+    font-size: 1.25rem;
 }
 
-.routine-table {
-    display: block;
-    margin-top: 30px;
-    width: 100%;
-    text-align: center;
-    z-index: 0;
+button:disabled, button[disabled] {
+    background-color: #d1d5db; /* Gray-300 for light mode */
+    color: #6b7280; /* Gray-500 for text */
+    cursor: not-allowed;
+    opacity: 0.6;
 }
 
-/* Conditional colors for seats */
-
-.seats-white {color: white;}
-.seats-green {color: #00ff00;}
-.seats-yellow {color: yellow;}
-.seats-red {color: red;}
-.seats-black {color: black;}
-
-/* Temporary construction sections */
-
-.overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.4);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    backdrop-filter: blur(10px);
-    z-index: 2;
-}
-
-.overlay-content {
-    text-align: center;
-    color: white;
-}
-
-.overlay h2 {
-    font-size: 3rem;
-    margin-bottom: 20px;
-}
-
-.overlay p {
-    font-size: 1.5rem;
-    margin: 0;
-}
-
-.overlay a {
-    color: #00fbff;
-    text-decoration: none;
-    font-weight: bold;
-}
-
-.overlay a:hover {
-    text-decoration: underline;
+.dark button:disabled, .dark button[disabled] {
+    background-color: #4b5563; /* Gray-600 for dark mode */
+    color: #9ca3af; /* Gray-400 for text */
 }
