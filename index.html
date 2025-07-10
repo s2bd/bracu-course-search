@@ -47,51 +47,7 @@
             });
         });
     </script>
-   <style>
-    /* Seat color classes */
-    .seats-white { color: white; }
-    .seats-green { color: #00ff00; }
-    .seats-yellow { color: yellow; }
-    .seats-red { color: red; }
-    .seats-black { color: black; }
-
-    /* Pill-shaped seat container */
-    .seat-pill {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        padding: 4px 12px;
-        border-radius: 9999px;
-        border: 2px solid black;
-        font-size: 0.875rem;
-        margin-top: 8px;
-    }
-
-    /* Card entrance animation */
-    @keyframes slideIn {
-        0% {
-            opacity: 0;
-            transform: translateY(20px);
-        }
-        100% {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-
-    .course-card {
-        animation: slideIn 0.3s ease-out forwards;
-    }
-
-    /* Delay animation for each card */
-    .course-card:nth-child(1) { animation-delay: 0s; }
-    .course-card:nth-child(2) { animation-delay: 0.1s; }
-    .course-card:nth-child(3) { animation-delay: 0.2s; }
-    .course-card:nth-child(4) { animation-delay: 0.3s; }
-    .course-card:nth-child(5) { animation-delay: 0.4s; }
-    .course-card:nth-child(6) { animation-delay: 0.5s; }
-    /* Add more delays if needed */
-</style>
+   
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-5P9177K93X"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
@@ -99,21 +55,18 @@
       gtag('js', new Date());
       gtag('config', 'G-5P9177K93X');
     </script>
-    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 </head>
 <body class="font-sans bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 min-h-screen flex flex-col">
     <!-- Header -->
-    <header class="bg-white dark:bg-gray-800 shadow-md sticky top-0 z-40">
-        <nav class="container mx-auto px-4 py-3 flex items-center justify-between">
-            <div class="flex items-center space-x-2">
-                <h1 class="text-xl font-semibold">BRACU Course Search</h1>
-            </div>
-            <div class="flex items-center space-x-4">
-                <button id="theme-toggle" class="text-2xl focus:outline-none" aria-label="Toggle theme">🌙</button>
-                <button id="toggle-cart" class="text-2xl focus:outline-none" aria-label="Toggle cart">🛒</button>
-            </div>
-        </nav>
-    </header>
+<header class="sticky top-0 z-[1000] bg-white/80 dark:bg-gray-800/80 backdrop-blur-md shadow-lg rounded-b-3xl">
+  <nav class="container mx-auto px-4 py-3 flex items-center justify-between">
+    <h1 class="text-xl font-semibold">Bracourse.</h1>
+    <div class="flex items-center space-x-4">
+      <button id="theme-toggle" class="text-2xl focus:outline-none" aria-label="Toggle theme">🌙</button>
+      <button id="toggle-cart" class="text-2xl focus:outline-none" aria-label="Toggle cart">🛒</button>
+    </div>
+  </nav>
+</header>
 
     <!-- Main Content -->
     <main class="container mx-auto px-4 py-8 flex-1">
@@ -185,15 +138,11 @@
 </section>
     </main>
 
-    <!-- Cart Sidebar -->
-    <aside id="cart" class="fixed top-0 right-0 h-full w-80 bg-white dark:bg-gray-800 shadow-lg transform translate-x-full transition-transform duration-300 z-50">
-        <div class="p-4">
-            <button id="close-cart" class="text-2xl mb-4 focus:outline-none" aria-label="Close cart">✖</button>
-            <h2 class="text-lg font-semibold mb-4">Selected Courses</h2>
-            <ul id="cart-items" class="space-y-2"></ul>
-            <button id="clear-cart" class="w-full mt-4 bg-red-500 text-white py-2 rounded-lg hover:bg-red-600 transition-colors">Clear All</button>
-        </div>
-    </aside>
+<!-- Cart Overlay -->
+<div id="cart" class="fixed bottom-4 right-4 z-50 hidden">
+    <ul id="cart-items" class="space-y-3"></ul>
+    <button id="clear-cart" class="mx-auto mt-3 w-10 h-10 bg-red-500 text-white rounded-full flex items-center justify-center hover:bg-red-600 transition-colors hidden" aria-label="Clear all courses">✖</button>
+</div>
 
     <!-- Footer -->
     <footer class="bg-gray-200 dark:bg-gray-800 py-4 mt-auto">
